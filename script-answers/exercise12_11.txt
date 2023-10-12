@@ -1,0 +1,28 @@
+Script started on 2023-03-26 19:26:38-03:00 [TERM="xterm-256color" TTY="/dev/pts/6" COLUMNS="180" LINES="11"]
+dave@LappyTappy:/mnt/c/Users/djbla/OneDrive/Documents/dev/fullStackOpen parent-dir/part12/part12-containers-applications/todo-app/todo-backend$ docker exec -it todo-backend-redis-1 bash
+root@9b47bc8035b9:/data# redis-cli
+127.0.0.1:6379>
+127.0.0.1:6379>
+127.0.0.1:6379> keys *
+(empty array)
+127.0.0.1:6379> get added_todos
+(nil)
+127.0.0.1:6379> set added_todos 9001
+OK
+127.0.0.1:6379> get added_todos
+"9001"
+127.0.0.1:6379> get added_todos
+"9002"
+127.0.0.1:6379> del added_todos
+(integer) 1
+127.0.0.1:6379> keys *
+(empty array)
+127.0.0.1:6379> get added_todos
+"1"
+127.0.0.1:6379>
+root@9b47bc8035b9:/data#
+exit
+dave@LappyTappy:/mnt/c/Users/djbla/OneDrive/Documents/dev/fullStackOpen parent-dir/part12/part12-containers-applications/todo-app/todo-backend$
+exit
+
+Script done on 2023-03-26 19:29:27-03:00 [COMMAND_EXIT_CODE="0"]

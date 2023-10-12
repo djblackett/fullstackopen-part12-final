@@ -1,0 +1,16 @@
+Script started on 2023-03-21 11:50:11-03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="106" LINES="13"]
+dave@LappyTappy:~$  docker run -it ubuntu bash
+root@74765a211283:/# ls
+bin   dev  home  lib32  libx32  mnt  proc  run   srv  tmp  var
+boot  etc  lib   lib64  media   opt  root  sbin  sys  usr
+root@74765a211283:/# cd usr/src
+root@74765a211283:/usr/src# ls
+root@74765a211283:/usr/src# mkdir app
+root@74765a211283:/usr/src# cd app
+root@74765a211283:/usr/src/app# touch index.js
+root@74765a211283:/usr/src/app# exit
+exit
+dave@LappyTappy:~$
+exit
+
+Script done on 2023-03-21 11:51:37-03:00 [COMMAND_EXIT_CODE="0"]

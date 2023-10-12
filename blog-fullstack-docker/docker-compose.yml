@@ -1,0 +1,43 @@
+services:
+  frontend:
+    build:
+      context: bloglist-frontend
+      dockerfile: Dockerfile
+    environment:
+      REACT_APP_BACKEND_URL: http://proxy/api
+    networks:
+        - my_network
+    image: bloglist-frontend-prod
+
+
+  backend:
+    build:
+      context: bloglist-backend
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - REQUEST_ORIGIN=http://proxy/
+      - SECRET=Secret
+      - DATABASE_URL=mongodb+srv://fullstack:Vv3oxVAaSX5qlGv3@cluster0.ph36nzi.mongodb.net/production?retryWrites=true&w=majority
+      - TEST_MONGODB_URI=mongodb+srv://fullstack:Vv3oxVAaSX5qlGv3@cluster0.ph36nzi.mongodb.net/test?retryWrites=true&w=majority
+    networks:
+      - my_network
+
+  proxy:
+    image: nginx
+    hostname: proxy
+    container_name: proxy
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    networks:
+      - my_network
+
+
+networks:
+  my_network:
+    driver: bridge

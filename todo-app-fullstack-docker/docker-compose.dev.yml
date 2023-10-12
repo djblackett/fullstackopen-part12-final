@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  frontend-dev:
+    build:
+      dockerfile: dev.Dockerfile
+      context: todo-frontend
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:80/api/
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./todo-frontend:/usr/src/app
+    networks:
+      - my_network
+    image: todo-app-frontend-dev
+
+  backend-dev:
+    depends_on:
+      mongo:
+        condition: service_started
+      redis:
+        condition: service_started
+    image: todo-app-backend-dev
+    build:
+      dockerfile: dev.Dockerfile
+      context: todo-backend
+    ports:
+      - ":8080"
+    environment:
+      - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
+      - REDIS_URL=redis://redis:6379
+      - PORT=8080
+      - REQUEST_ORIGIN=http://proxy-dev/
+    volumes:
+      - ./todo-backend:/usr/src/app
+    networks:
+      - my_network
+
+  mongo:
+    image: mongo
+    ports:
+      - "3456:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./todo-backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data:/data/db
+    networks:
+      - my_network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    command: [ 'redis-server', '--appendonly', 'yes' ]
+    volumes:
+      - ./todo-backend/redis_data:/data
+    networks:
+      - my_network
+
+  proxy-dev:
+    image: nginx
+    hostname: proxy-dev
+    container_name: proxy-dev
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    networks:
+      - my_network
+
+volumes:
+  mongo_data:
+
+networks:
+  my_network:
+    driver: bridge
